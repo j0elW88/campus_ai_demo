@@ -1,0 +1,171 @@
+body, #root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #23242a;
+  position: relative;
+  font-family: 'Segoe UI', Helvetica, sans-serif;
+}
+
+.stripes-bg {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.swoosh-line {
+  position: absolute;
+  left: -10vw;
+  top: 0;
+  width: 150vw;
+  height: 100vh;
+  border-top: 180px solid #e53935; /* solid red line at the top */
+  border-radius: 60% 60% 0 0/100% 100% 0 0;
+  transform: rotate(-45deg);
+  background: none;
+}
+/* FIX THIS NOW /*
+
+/* Red strand */
+.swoosh1 {
+  border-top: 60px solid #e53935;
+  z-index: 1;
+  bottom: 8vh;
+}
+
+
+/* Logo container */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  z-index: 1;
+  position: relative;
+}
+
+.logo-container img {
+  height: 64px;
+  width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
+/* Main app container */
+.App {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: rgba(40, 42, 54, 0.97);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(60, 60, 120, 0.18);
+}
+
+/* Chat box styling */
+.chat-box {
+  background: #23242a;
+  padding: 1.5rem;
+  border-radius: 14px;
+  height: 420px;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(80, 80, 94, 0.18);
+  color: #fff;
+}
+
+/* User and bot message bubbles */
+.user, .bot {
+  margin: 12px 0;
+  padding: 10px 18px;
+  border-radius: 12px;
+  display: inline-block;
+  max-width: 80%;
+  word-break: break-word;
+  font-size: 1.08rem;
+  box-shadow: 0 1px 4px rgba(60, 60, 120, 0.12);
+  transition: background 0.2s;
+}
+
+.user {
+  text-align: right;
+  background:  #79797f 50%;
+  margin-left: 20%;
+  color: #23242a;
+  font-weight: 500;
+}
+
+.bot {
+  text-align: left;
+  background:  #fbf8e5;
+  margin-right: 20%;
+  color: #23242a;
+  font-weight: 500;
+}
+
+/* Input area styling */
+.input-area {
+  display: flex;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1.08rem;
+  border: 1px solid #1e3a8a;
+  border-radius: 10px;
+  outline: none;
+  background: #23242a;
+  color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(60, 60, 120, 0.12);
+}
+
+input:focus {
+  border-color: #e53935;
+  box-shadow: 0 2px 8px rgba(229, 57, 53, 0.18);
+}
+
+button {
+  padding: 12px 28px;
+  font-size: 1.08rem;
+  border: none;
+  border-radius: 10px;
+  background:  #1e3a8a 100%;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(60, 60, 120, 0.18);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+button:hover, button:focus {
+  background:#e53935 100%;
+  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 800px) {
+  .App {
+    max-width: 98vw;
+    padding: 1rem;
+  }
+  .chat-box {
+    height: 300px;
+    padding: 1rem;
+  }
+  .input-area {
+    flex-direction: column;
+    gap: 8px;
+  }
+  button {
+    width: 100%;
+  }
+}
