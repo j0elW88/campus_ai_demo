@@ -34,6 +34,7 @@ body {
   padding: 14px 20px;
   max-width: 80%;
   word-break: break-word;
+  margin-bottom: 0.75rem;
   background-color: #2a2a2e;
   color: #fff;
 }
@@ -55,7 +56,6 @@ body {
   opacity: 0.4;           /* Light gray for subtlety */
   margin-bottom: 4px;
 }
-
 
 
 /* ========== Input and Send Button ========== */
@@ -159,6 +159,7 @@ body {
 }
 
 /* ========== Effects Layer ========== */
+
 @layer components {
   .glass-effect {
     background: rgba(40, 42, 54, 0.85);
@@ -171,30 +172,26 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(0, 0, 0, 0.2), 0 16px 35px rgba(0, 0, 0, 0.1);
   }
 
-  .twinkling-stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 0;
-  }
+  .twinkling-stars .star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 2s infinite ease-in-out;
+  pointer-events: none;
+}
 
-  .star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.2;
-    animation: twinkle-star 3s infinite;
-  }
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
 
-  @keyframes twinkle-star {
-    0%, 100% { opacity: 0.2; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.4); }
-  }
+
+
+
+/* ========== Background Filter ========== */
 
   @keyframes backgroundMove {
     100% { background-position: 0% 100%; }
@@ -206,7 +203,7 @@ body {
     animation: backgroundMove 60s ease infinite;
   }
 
-
+/* ========== Background Stripe ========== */
   
   @keyframes stripe-illuminate {
     0%, 97% {

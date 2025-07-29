@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+// Background Twinkling Stars Effect
 const TwinklingStars = () => {
   useEffect(() => {
     const container = document.createElement("div");

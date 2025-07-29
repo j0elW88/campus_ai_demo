@@ -142,3 +142,93 @@ Restart the backend. All responses will be routed through the local model.
 - Embeddings are stored in `embeddings.json` and are regenerated only when missing.
 - System prompt logic is enforced for every user query.
 - For frontend integration, use the `/chat` endpoint and connect via simple POST requests.
+
+
+## Frontend (React + Vite)
+
+A modern chatbot interface is included under the `client/` directory using React, TypeScript, and Tailwind CSS.
+
+### 1. Setup
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Access it at:
+
+```
+http://localhost:5173/
+```
+
+### 2. Project Structure
+
+```
+client/
+├── public/
+├── src/
+│   ├── assets/              # Logos and images
+│   ├── components/          # RedStripe, TwinklingStars, etc.
+│   ├── pages/               # Index.tsx
+│   ├── global.css           # Styles
+│   └── main.tsx             # App entry
+├── vite.config.ts
+└── package.json
+```
+
+### 3. Optional Frontend Env
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+Update fetch calls to use:
+
+```ts
+fetch(`${import.meta.env.VITE_API_URL}/chat`, { ... })
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
+```
+
+Use static hosting or integrate with Flask + NGINX.
+
+---
+
+## Ollama Integration (Optional)
+
+1. Install [Ollama](https://ollama.com)
+2. Run a model:
+
+```bash
+ollama run llama3.2:1b
+```
+
+3. Update `.env`:
+
+```env
+USE_OTHER=true
+OTHER_MODEL=llama3.2:1b
+```
+
+---
+
+## Response Behavior Overview
+
+- Never hallucinate or guess when uncertain
+- Always follow internal documentation strictly
+- If unclear or missing, respond:
+
+> "This is not explicitly stated in the knowledge article. Please consult a supervisor for confirmation."
+
+---
+
+## Notes
+
+- Embeddings only regenerate if `embeddings.json` is missing.
+- Frontend sends all prior messages for stateless memory simulation.
+- Styling includes glowing headers, animated stripes, and twinkling background.

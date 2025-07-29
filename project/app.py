@@ -109,7 +109,7 @@ def chat():
 
     if USE_OTHER:
         # Use Local LLM
-        model = os.getenv("OTHER_MODEL", "put_its_name_here")  #configured in .env
+        model = os.getenv("OTHER_MODEL", "MODEL_NAME")  #configured in .env
         payload = {
             "model": model,
             "messages": messages

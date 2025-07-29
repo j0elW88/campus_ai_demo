@@ -98,9 +98,9 @@ useEffect(() => {
                     >
                       <div className={`message-bubble ${msg.role === "user" ? "user" : "bot"}`}>
                         <div className="message-label">
-                          {msg.role === "user" ? "You" : "EMPOWER"}
+                          {msg.role === "user" ? "You" : "Derek"}
                         </div>
-                        <div className="text-base">{msg.content}</div>
+                        <div className="text-base whitespace-pre-wrap">{msg.content}</div>
                       </div>
                     </div>
                   ))}
