@@ -1,0 +1,282 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== Base Styles ========== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: white;
+  overflow-x: hidden;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+/* ========== Chat Area ========== */
+.chat-box {
+  background: transparent;
+  border-radius: 20px;
+  padding: 1.25rem;
+  height: 65vh;                     
+  max-height: calc(100vh - 430px);  
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  scrollbar-gutter: stable;
+}
+.message-bubble {
+  border-radius: 20px;
+  padding: 14px 20px;
+  max-width: 80%;
+  word-break: break-word;
+  background-color: #2a2a2e;
+  color: #fff;
+}
+
+.user {
+  background-color: #3173eb;
+  align-self: flex-end;
+}
+
+.bot {
+  background-color: #1e1e22;
+  align-self: flex-start;
+}
+
+/* ========== Message Labels ========== */
+.message-label {
+  font-size: 0.75rem;     /* Smaller text */
+  font-weight: 500;
+  opacity: 0.4;           /* Light gray for subtlety */
+  margin-bottom: 4px;
+}
+
+
+
+/* ========== Input and Send Button ========== */
+.input-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 1.5rem;
+  padding: 5px;
+  background: transparent;
+  border-radius: 9999px;
+  box-shadow: none;
+  z-index: 20;
+  position: relative;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 14px 18px;
+  border-radius: 20px;
+  border: 1px solid #555;
+  background: #1e1e22;
+  color: white;
+  font-size: 1rem;
+}
+
+.input-area input:disabled {
+  opacity: 0.5;
+}
+
+.input-area button {
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: none;
+  background-color: #013491;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 60px;
+  transition: background-color 0.3s;
+}
+
+.input-area button:hover {
+  background-color: #3173eb;
+}
+
+.input-area button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ========== Loading Animation ========== */
+/* Chatbot typing dots */
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #f33;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blink 1.2s infinite ease-in-out both;
+  margin-right: 5px;
+}
+
+.dot.delay-100 {
+  animation-delay: 0.2s;
+}
+
+.dot.delay-200 {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    opacity: 0.2;
+    transform: scale(0.9);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+
+/* ========== Scrollbar ========== */
+.chat-box::-webkit-scrollbar {
+  width: 9px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+  background-color: #e53935; 
+  border-radius: 6px;
+  border: 2.5px solid transparent;
+  background-clip: content-box;
+}
+
+/* ========== Effects Layer ========== */
+@layer components {
+  .glass-effect {
+    background: rgba(40, 42, 54, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .depth-shadow {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(0, 0, 0, 0.2), 0 16px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  .twinkling-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.2;
+    animation: twinkle-star 3s infinite;
+  }
+
+  @keyframes twinkle-star {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.4); }
+  }
+
+  @keyframes backgroundMove {
+    100% { background-position: 0% 100%; }
+  }
+
+  body {
+    background: linear-gradient(270deg, #0f172a, #1a1a2e, #0f172a);
+    background-size: 600% 600%;
+    animation: backgroundMove 60s ease infinite;
+  }
+
+
+  
+  @keyframes stripe-illuminate {
+    0%, 97% {
+      filter: brightness(1) drop-shadow(0 0 0px #e53935);
+    }
+    98% {
+      filter: brightness(1.4) drop-shadow(0 0 20px #e53935);
+    }
+    100% {
+      filter: brightness(1) drop-shadow(0 0 0px #e53935);
+    }
+  }
+
+.swoosh-line {
+  position: absolute;
+  top: 15vh;
+  left: -30vw;
+  width: 220vw;
+  height: 160vh;
+  border-top: 245px solid #e53935;
+  border-radius: 100% 20% 0 0 / 100% 25% 0 0;
+  transform: rotate(-3deg);
+  background: none;
+  z-index: 0;
+  opacity: 0.95;
+  overflow: hidden;
+
+  animation: stripe-illuminate 90s ease-in-out infinite;
+}
+}
+
+/* ========== Derek Title ========== */
+.empower-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 6vw, 5rem);
+  text-align: center;
+  letter-spacing: -.10em;
+  color: #ff1f1f;
+  text-shadow: 0 0 10px #ff1f1f, 0 0 20px #ff1f1f, 0 0 40px #c91414;
+  margin-top: 0.5rem;
+  margin-bottom: -8rem;
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .empower-title {
+    font-size: 6rem;       /* Between 5xl and 6xl */
+  }
+}
+
+.text-glow {
+  color: #ff3030;
+  text-shadow:
+    0 0 3px #f00101,
+    0 0 6px #b60d0d,
+    0 0 12px #cc0b0b,
+    0 0 20px #771313;
+}
+
+
+/* ========== CampusUSA Logo ========== */
+.logo-top-spacing {
+  margin-top: 1rem;
+}
+
+.campus-logo {
+  height: 3rem; /* h-12 */
+  max-width: 100px;
+  margin-top: 1rem; /* mt-4 */
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
