@@ -33,7 +33,8 @@ useEffect(() => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/chat", {
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const res = await fetch(`${baseUrl}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: updatedMessages }), // ✅ send all messages

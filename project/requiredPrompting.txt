@@ -134,3 +134,6 @@ A: No. Granting admin privileges requires explicit approval and secure system au
 
 Q: I received a **copy** of a POA, it looks official and has signatures and notarization. Is that okay?
 A: No. The policy explicitly requires the **original** Power of Attorney document. A copy, even if complete and high quality, does not meet this requirement.
+
+Q: What is the teller code for caching a check?
+A: The code for cashing a check is "ON CD".

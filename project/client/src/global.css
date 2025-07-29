@@ -20,7 +20,7 @@ body {
 .chat-box {
   background: transparent;
   border-radius: 20px;
-  padding: 1.25rem;
+  padding: 1.4rem;
   height: 65vh;                     
   max-height: calc(100vh - 430px);  
   overflow-y: auto;
@@ -244,8 +244,8 @@ body {
   letter-spacing: -.10em;
   color: #ff1f1f;
   text-shadow: 0 0 10px #ff1f1f, 0 0 20px #ff1f1f, 0 0 40px #c91414;
-  margin-top: 0.5rem;
-  margin-bottom: -8rem;
+  margin-top: 1vh;
+  margin-bottom: -10vh;
   line-height: 1.1;
 }
 

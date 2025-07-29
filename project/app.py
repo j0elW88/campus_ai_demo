@@ -11,8 +11,7 @@ import requests
 from flask_cors import CORS
 
 
-from dotenv import load_dotenv
-load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Non-OpenAI Client
 USE_OTHER = os.getenv("USE_OTHER", "false").lower() == "true"
@@ -48,6 +47,9 @@ def generate_embeddings():
             text = pytesseract.image_to_string(Image.open(path))
         elif file.lower().endswith(".pdf"):
             text = extract_text_from_pdf(path)
+        elif file.lower().endswith(".txt"):
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read()
         else:
             continue  # Skip unsupported file types
 
@@ -112,12 +114,21 @@ def chat():
         model = os.getenv("OTHER_MODEL", "MODEL_NAME")  #configured in .env
         payload = {
             "model": model,
-            "messages": messages
+            "messages": messages,
+            "stream": True
         }
-        response = requests.post("http://localhost:11434/api/chat", json=payload)
+        response = requests.post("http://localhost:11434/api/chat", json=payload, stream=True)
+
         if response.status_code == 200:
-            return jsonify({"reply": response.json()["message"]["content"]})
+            full_reply = ""
+            for line in response.iter_lines():
+                if line:
+                    chunk = json.loads(line.decode("utf-8"))
+                    if "message" in chunk:
+                        full_reply += chunk["message"]["content"]
+            return jsonify({"reply": full_reply})
         else:
+            print("Ollama error:", response.status_code, response.text)
             return jsonify({"reply": "Error calling Ollama API."}), 500
     else:
         # Default to OpenAI
@@ -128,7 +139,17 @@ def chat():
         return jsonify({"reply": response.choices[0].message.content})
 
 if __name__ == "__main__":
-    print("⏳ Generating embeddings...")
-    EMBEDDINGS = load_embeddings()
-    print("✅ Ready to chat.")
-    app.run(port=5000)
+    try:
+        print("⏳ Generating embeddings...")
+        EMBEDDINGS = load_embeddings()
+        print("✅ Ready to chat.")
+    except Exception as e:
+        print("❌ Error generating embeddings:", e)
+        EMBEDDINGS = []
+
+    app.run(host="0.0.0.0", port=5000)
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    print("❌ Unhandled error:", e)
+    return jsonify({"reply": "Internal server error"}), 500

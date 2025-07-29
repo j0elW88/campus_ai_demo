@@ -1,0 +1,10 @@
+#OpenAI API Key for Testing
+OPENAI_API_KEY = your_api_key_here
+
+# Optional: Clear or ignore other models
+OTHER_MODEL=gemma3:1b
+USE_OTHER=false
+MODEL_NAME=gemma3:1b
+
+VITE_API_URL=http://backend:5000
+

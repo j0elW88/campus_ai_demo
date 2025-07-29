@@ -77,7 +77,7 @@ Text will be extracted using OCR or PDF parsing and embedded for semantic search
 
 ### 4. Define System Prompt
 
-Add a `requiredPrompting.txt` file with your system behavior rules. This file defines how the assistant should interpret, prioritize, and respond to queries. It will always be used as the system prompt at runtime.
+Edit `requiredPrompting.txt` file with your system behavior rules. This file defines how the assistant should interpret, prioritize, and respond to queries. It will always be used as the system prompt at runtime.
 
 ---
 
@@ -89,7 +89,7 @@ Run the backend:
 python app.py
 ```
 
-The first run will generate `embeddings.json` based on the documents in `image_knowledge_artifacts`.
+The first run will generate `embeddings.json` based on the documents in `requiredPrompting.txt`.
 
 The app will be available at:
 
@@ -105,7 +105,7 @@ Send a POST request with:
 
 ---
 
-## Ollama Integration (Optional)
+## Ollama Integration (Optional + Example)
 
 To use a local LLM model instead of OpenAI:
 
@@ -113,27 +113,19 @@ To use a local LLM model instead of OpenAI:
 2. Download and run a model:
 
 ```bash
-ollama run llama3.2:1b
+In New Terminal Instance run:
+
+ollama run gemma3:1b
 ```
 
 3. Update your `.env` file:
 
 ```env
 USE_OTHER=true
-OTHER_MODEL=llama3.2:1b
+OTHER_MODEL=gemma3:1b
 ```
 
-Restart the backend. All responses will be routed through the local model.
-
----
-
-## Response Behavior Overview
-
-- Never hallucinate or guess when documents are not clear
-- Always follow knowledge article instructions, especially when something is stated as "not allowed" or "should not"
-- When no relevant information exists, respond with:
-
-> "This is not explicitly stated in the knowledge article. Please consult a supervisor for confirmation."
+Restart the backend (py app.py). All responses will be routed through the local model.
 
 ---
 

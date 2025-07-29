@@ -3,3 +3,8 @@ openai
 pytesseract
 pillow
 numpy
+PyMuPDF
+requests
+flask-cors
+python-dotenv
+flask-socketio 
