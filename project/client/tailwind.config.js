@@ -29,3 +29,14 @@ module.exports = {
   },
   plugins: [],
 }
+
+export default {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"Segoe UI"', 'sans-serif'],
+      },
+    },
+  },
+};
+

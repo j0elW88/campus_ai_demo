@@ -3,10 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* ========== Base Styles ========== */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
   background-color: #121212;
   color: white;
   overflow-x: hidden;
@@ -20,41 +22,52 @@ body {
 .chat-box {
   background: transparent;
   border-radius: 20px;
-  padding: 1.4rem;
-  height: 65vh;                     
-  max-height: calc(100vh - 430px);  
+  padding: 1rem;
+  height: 60vh;
+  max-height: calc(100vh - 400px);
   overflow-y: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
   scrollbar-gutter: stable;
 }
+
 .message-bubble {
   border-radius: 20px;
-  padding: 14px 20px;
-  max-width: 80%;
+  padding: 4px 14px;
+  max-width: 75%;
+  font-size: 0.91rem;
+  line-height: 1.4;
   word-break: break-word;
-  margin-bottom: 0.75rem;
+  margin-bottom: .75rem;
   background-color: #2a2a2e;
   color: #fff;
 }
 
+
 .user {
   background-color: #3173eb;
-  align-self: flex-end;
+  align-self: flex-end;  
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
 }
 
 .bot {
   background-color: #1e1e22;
   align-self: flex-start;
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
 }
+
 
 /* ========== Message Labels ========== */
 .message-label {
-  font-size: 0.75rem;     /* Smaller text */
+  font-size: 0.65rem;     /* Smaller text */
   font-weight: 500;
   opacity: 0.4;           /* Light gray for subtlety */
-  margin-bottom: 4px;
+  margin-bottom: -7px;
 }
 
 

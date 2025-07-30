@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { RedStripe } from "@/components/RedStripe";
 import { TwinklingStars } from "@/components/TwinklingStars";
 import CampusLogo from "@/assets/CampusLogo.png";
+import ReactMarkdown from "react-markdown";
 import "@/global.css";
 
 const Index = () => {
@@ -101,7 +102,9 @@ useEffect(() => {
                         <div className="message-label">
                           {msg.role === "user" ? "You" : "Derek"}
                         </div>
-                        <div className="text-base whitespace-pre-wrap">{msg.content}</div>
+                        <div className="text-base whitespace-pre-wrap">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                          </div>
                       </div>
                     </div>
                   ))}
