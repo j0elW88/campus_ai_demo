@@ -224,3 +224,10 @@ OTHER_MODEL=llama3.2:1b
 - Embeddings only regenerate if `embeddings.json` is missing.
 - Frontend sends all prior messages for stateless memory simulation.
 - Styling includes glowing headers, animated stripes, and twinkling background.
+
+
+## Booting
+
+Once configuration is complete, simply run:
+
+docker compose up --build
