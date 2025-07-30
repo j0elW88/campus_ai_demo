@@ -8,3 +8,5 @@ requests
 flask-cors
 python-dotenv
 flask-socketio 
+gunicorn
+pdfplumber

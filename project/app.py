@@ -4,9 +4,10 @@ import numpy as np
 from flask import Flask, request, jsonify
 from PIL import Image
 import pytesseract
+from pytesseract import Output
 from openai import OpenAI
+import pdfplumber
 from numpy.linalg import norm
-import fitz
 import requests
 from flask_cors import CORS
 
@@ -26,6 +27,90 @@ IMAGE_FOLDER = "image_knowledge_artifacts"
 EMBED_FILE = "embeddings.json"
 CHUNK_SIZE = 1000
 
+
+def extract_text_from_image_with_layout(image_path):
+    from pytesseract import image_to_data, Output
+    from PIL import Image
+
+    img = Image.open(image_path)
+    data = image_to_data(img, output_type=Output.DICT)
+
+    lines = {}
+    for i in range(len(data["text"])):
+        word = data["text"][i].strip()
+        if not word or int(data["conf"][i]) < 60:
+            continue
+
+        block_num = data["block_num"][i]
+        par_num = data["par_num"][i]
+        line_num = data["line_num"][i]
+        left = data["left"][i]
+
+        # Unique key per visual line (could also add block_num to preserve more structure)
+        key = (block_num, par_num, line_num)
+        lines.setdefault(key, []).append((left, word))
+
+    # Sort words within lines by horizontal position, and lines by their block/para/line order
+    sorted_lines = []
+    for key in sorted(lines.keys()):
+        words = sorted(lines[key], key=lambda x: x[0])
+        line_text = ""
+        prev_x = None
+        for x, word in words:
+            if prev_x is not None and (x - prev_x) > 40:  # spacing threshold (adjustable)
+                line_text += "    "  # simulate tabbed spacing
+            elif line_text:
+                line_text += " "
+            line_text += word
+            prev_x = x
+        last_left = 0
+        for left, word in words:
+            spacing = "\t" if left - last_left > 60 else " "
+            line_text += spacing + word if line_text else word
+            last_left = left
+
+        sorted_lines.append(line_text)
+
+    return "\n".join(sorted_lines)
+
+
+def extract_text_from_image_with_columns(image_path):
+    from pytesseract import image_to_data, Output
+    from PIL import Image
+
+    img = Image.open(image_path)
+    data = image_to_data(img, output_type=Output.DICT)
+
+    lines_by_y = {}
+    for i in range(len(data["text"])):
+        word = data["text"][i].strip()
+        if not word or int(data["conf"][i]) < 60:
+            continue
+
+        # Round y to group lines
+        y_center = data["top"][i] + data["height"][i] // 2
+        rounded_y = round(y_center / 10) * 10  # adjust binning granularity if needed
+        lines_by_y.setdefault(rounded_y, []).append({
+            "x": data["left"][i],
+            "text": word
+        })
+
+    # Now sort each line by x to preserve column structure
+    structured_lines = []
+    for y in sorted(lines_by_y.keys()):
+        line = sorted(lines_by_y[y], key=lambda w: w["x"])
+        line_text = []
+        prev_x = None
+        for word in line:
+            if prev_x is not None and (word["x"] - prev_x) > 50:  # adjustable threshold
+                line_text.append("    ")  # simulate tab separation
+            line_text.append(word["text"])
+            prev_x = word["x"]
+        structured_lines.append(" ".join(line_text))
+
+    return "\n".join(structured_lines)
+
+
 def load_embeddings():
     if os.path.exists(EMBED_FILE):
         with open(EMBED_FILE, "r") as f:
@@ -34,9 +119,15 @@ def load_embeddings():
 
 def extract_text_from_pdf(pdf_path):
     text = ""
-    with fitz.open(pdf_path) as doc:
-        for page in doc:
-            text += page.get_text()
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text(x_tolerance=1.5)
+            if page_text:
+                text += page_text + "\n"
+            else:
+                # fallback OCR on image of page
+                img = page.to_image(resolution=300).original
+                text += pytesseract.image_to_string(img) + "\n"
     return text
 
 def generate_embeddings():
@@ -44,7 +135,10 @@ def generate_embeddings():
     for file in sorted(os.listdir(IMAGE_FOLDER)):
         path = os.path.join(IMAGE_FOLDER, file)
         if file.lower().endswith((".png", ".jpg", ".jpeg")):
-            text = pytesseract.image_to_string(Image.open(path))
+            if "grid" in file.lower() or "table" in file.lower():
+                text = extract_text_from_image_with_columns(path)
+            else:
+                text = extract_text_from_image_with_layout(path)
         elif file.lower().endswith(".pdf"):
             text = extract_text_from_pdf(path)
         elif file.lower().endswith(".txt"):
@@ -133,23 +227,18 @@ def chat():
     else:
         # Default to OpenAI
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             messages=messages
         )
         return jsonify({"reply": response.choices[0].message.content})
 
+try:
+    print("⏳ Generating embeddings...")
+    EMBEDDINGS = load_embeddings()
+    print("✅ Ready to chat.")
+except Exception as e:
+    print("❌ Error generating embeddings:", e)
+    EMBEDDINGS = []
+
 if __name__ == "__main__":
-    try:
-        print("⏳ Generating embeddings...")
-        EMBEDDINGS = load_embeddings()
-        print("✅ Ready to chat.")
-    except Exception as e:
-        print("❌ Error generating embeddings:", e)
-        EMBEDDINGS = []
-
     app.run(host="0.0.0.0", port=5000)
-
-@app.errorhandler(Exception)
-def handle_error(e):
-    print("❌ Unhandled error:", e)
-    return jsonify({"reply": "Internal server error"}), 500

@@ -228,6 +228,8 @@ OTHER_MODEL=llama3.2:1b
 
 ## Booting
 
-Once configuration is complete, simply run:
+- Once configuration is complete, simply run:
+-                   'docker compose up --build'
 
-docker compose up --build
+- Then from then on use:
+-                    'docker compose up'
