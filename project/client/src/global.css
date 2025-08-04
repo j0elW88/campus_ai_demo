@@ -180,6 +180,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
+  
 
   .depth-shadow {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 8px 25px rgba(0, 0, 0, 0.2), 0 16px 35px rgba(0, 0, 0, 0.1);
@@ -201,6 +202,15 @@ body {
   50% { opacity: 1; }
 }
 
+
+  /* ========== CampusUSA Logo (Top-left version) ========== */
+  .campus-logo-top {
+    height: 3rem;
+    max-width: 120px;
+    margin-top: .25rem;
+    margin-left: 0.25rem;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  }
 
 
 
@@ -257,7 +267,7 @@ body {
   letter-spacing: -.10em;
   color: #ff1f1f;
   text-shadow: 0 0 10px #ff1f1f, 0 0 20px #ff1f1f, 0 0 40px #c91414;
-  margin-top: 1vh;
+  margin-top: 2vh;
   margin-bottom: -10vh;
   line-height: 1.1;
 }
@@ -289,4 +299,78 @@ body {
   margin-top: 1rem; /* mt-4 */
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
 }
+
+/* ========== Feedback Container Style ========== */
+
+    .norm_feedback-button {
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: none;
+    background-color: #151426;
+    color: rgb(253, 255, 238);
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 60px;
+    transition: background-color 0.3s;
+  }
+
+  .faint-glow-button {
+  box-shadow:
+    0 0 4px rgba(255, 255, 255, 0.1),
+    0 0 10px rgba(0, 102, 255, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.faint-glow-button:hover {
+  box-shadow:
+    0 0 6px rgba(241, 15, 15, 0.359),
+    0 0 12px rgba(255, 0, 0, 0.2);
+}
+
+
+  .pos_feedback-button {
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: none;
+    background-color: #25a030;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 75px;
+    transition: background-color 0.3s;
+  }
+
+    .neg_feedback-button {
+    padding: 10px 10px;
+    border-radius: 12px;
+    border: none;
+    background-color: #ac1616;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 75px;
+    transition: background-color 0.3s;
+  }
+
+  .pos_feedback-button:hover {
+    background-color: #006108;
+  }
+
+  .neg_feedback-button:hover {
+    background-color: #850000;
+  }
+
+  .feedback-container {
+  background: rgb(21, 31, 87);
+  border-radius: 15px;
+  max-height: calc(100vh - 400px);
+  overflow: hidden;   /* will cut off excess content but NOT show scroll */
+  margin-bottom: 1rem;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 
