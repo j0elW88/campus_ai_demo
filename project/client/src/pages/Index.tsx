@@ -12,11 +12,15 @@ const Index = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null);
   const [showRating, setShowRating] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const [optionalFeedback, setOptionalFeedback] = useState("");
+
 
   useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
         if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
           setShowRating(false);
+          setOptionalFeedback("");  // clears text 
+
         }
       };
 
@@ -28,8 +32,7 @@ const Index = () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [showRating]);
-
-
+  
   const handleRating = async (rating: 'good' | 'bad') => {
     console.log(`User rated the chat as: ${rating}`);
     setShowRating(false);
@@ -45,6 +48,7 @@ const Index = () => {
     }
     setMessages([]);
     setInput('');
+    setOptionalFeedback("");
   };
 
   useEffect(() => {
@@ -171,15 +175,27 @@ const Index = () => {
 
             {/* Feedback Panel */}
             {showRating && (
-              <div className="feedback-container w-full max-w-sm px-4 py-6">
-                <div
-                  ref={panelRef}
-                  className="glass-effect depth-shadow rounded-2xl px-6 py-5 w-full max-w-md text-center"
-                >
-                  <p className="text-white text-base font-bold mb-1 font-sans">How Was Your Chat?</p>
-                  <div className="flex flex-row justify-center gap-6 mt-6">
-                    <button onClick={() => handleRating("good")} className="pos_feedback-button">Good</button>
-                    <button onClick={() => handleRating("bad")} className="neg_feedback-button">Bad</button>
+              <div className="w-full flex justify-center">
+                <div ref={panelRef} className="feedback-panel-wrapper">
+                  {/* Rating Box */}
+                  <div className="feedback-container">
+                    <p className="text-white text-base font-bold mt-2 mb-1 font-sans">How Was Your Chat?</p>
+                    <div className="flex flex-row justify-center gap-4 mb-2">
+                      <button onClick={() => handleRating("good")} className="pos_feedback-button">Good</button>
+                      <button onClick={() => handleRating("bad")} className="neg_feedback-button">Bad</button>
+                    </div>
+                  </div>
+
+                  {/* Optional Feedback Box */}
+                  <div className="feedback-container">
+                    <p className="text-white text-base font-bold mt-2 mb-1 font-sans">Optional Feedback</p>
+                    <textarea
+                      className="feedback-textarea"
+                      rows={3}
+                      placeholder="How Was Your Chat..."
+                      value={optionalFeedback}
+                      onChange={(e) => setOptionalFeedback(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>

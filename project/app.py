@@ -10,6 +10,9 @@ import pdfplumber
 from numpy.linalg import norm
 import requests
 from flask_cors import CORS
+import threading
+from analyzer import analyze_chat, get_trusted_parameters  #Custom python analyzer for feedback-based learning
+
 
 
 api_key = os.getenv("OPENAI_API_KEY")
@@ -198,8 +201,27 @@ def chat():
     top_chunks = retrieve_relevant_chunks(user_input, EMBEDDINGS)
     context = "\n\n".join(top_chunks)
 
+
     # Prepare message history with system prompt and knowledge
     system_prompt = load_system_prompt()
+
+
+    # Load trusted parameters (e.g. intent: 'check_balance')
+    trusted = get_trusted_parameters()
+    intent = trusted.get("intent", "general_query")
+
+    
+    # Adjust system prompt based on inferred intent
+    if intent == "check_balance":
+        system_prompt += "\n\nThe user likely wants to check an account balance. Respond clearly and directly."
+    elif intent == "review_transactions":
+        system_prompt += "\n\nThe user is reviewing recent transactions. Provide accurate chronological information."
+    elif intent == "find_routing_number":
+        system_prompt += "\n\nThe user is looking for a routing number. Provide the exact number quickly."
+    elif intent == "general_query":
+        system_prompt += "\n\nThis is a general user query. Use broad helpfulness and clarity."
+
+    
     messages = [{"role": "system", "content": system_prompt + "\n\nUse the following knowledge artifacts when relevant:\n" + context}] + message_history
 
     if USE_OTHER:
@@ -230,6 +252,21 @@ def chat():
             messages=messages
         )
         return jsonify({"reply": response.choices[0].message.content})
+
+
+# Analyzer 
+@app.route("/review", methods=["POST"])
+def review():
+    data = request.get_json()
+    rating = data.get("rating")
+    messages = data.get("messages", [])
+    feedback = data.get("feedback", "")  # optional feedback from user
+
+    # Run analysis in a background thread
+    threading.Thread(target=analyze_chat, args=(rating, messages, feedback)).start()
+
+    return jsonify({"status": "review submitted"}), 200
+
 
 try:
     print("⏳ Generating embeddings...")

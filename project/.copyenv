@@ -8,4 +8,4 @@ MODEL_NAME=gemma3:1b
 
 VITE_API_URL=http://backend:5000
 
-Enable_self_review = false
+ENABLE_SELF_REVIEW=false
