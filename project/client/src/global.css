@@ -22,9 +22,9 @@ body {
 .chat-box {
   background: transparent;
   border-radius: 20px;
-  padding: 1rem;
+  padding: 3rem;
   height: 60vh;
-  max-height: calc(100vh - 400px);
+  max-height: calc(100vh - 365px);
   overflow-y: auto;
   margin-bottom: 1rem;
   display: flex;
@@ -197,6 +197,7 @@ body {
   pointer-events: none;
 }
 
+
 @keyframes twinkle {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 1; }
@@ -262,19 +263,19 @@ body {
 .empower-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
-  font-size: clamp(2rem, 6vw, 5rem);
+  font-size: clamp(5rem, 6vw, 5rem); /* adjusts for screen size */
   text-align: center;
   letter-spacing: -.10em;
   color: #ff1f1f;
   text-shadow: 0 0 10px #ff1f1f, 0 0 20px #ff1f1f, 0 0 40px #c91414;
-  margin-top: 2vh;
+  margin-top: 0.75vh;
   margin-bottom: -10vh;
-  line-height: 1.1;
+  line-height: 0.9;
 }
 
 @media (min-width: 768px) {
   .empower-title {
-    font-size: 6rem;       /* Between 5xl and 6xl */
+    font-size: 6rem;     
   }
 }
 
@@ -337,6 +338,8 @@ body {
     font-weight: bold;
     cursor: pointer;
     min-width: 75px;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
     transition: background-color 0.3s;
   }
 
@@ -349,6 +352,8 @@ body {
     font-weight: bold;
     cursor: pointer;
     min-width: 75px;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
     transition: background-color 0.3s;
   }
 
@@ -363,9 +368,10 @@ body {
   .feedback-container {
   background: rgb(21, 31, 87);
   border-radius: 15px;
-  max-height: calc(100vh - 400px);
-  overflow: hidden;   /* will cut off excess content but NOT show scroll */
-  margin-bottom: 1rem;
+  max-height: calc(100vh - 450px);
+  overflow: hidden; 
+  margin-bottom: 0.5rem;
+  margin-top: -0.7rem;
   max-width: 250px;
   display: flex;
   align-items: center;

@@ -114,7 +114,7 @@ const Index = () => {
             <div className="chat-box overflow-y-auto max-h-[500px]" ref={chatBoxRef}>
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-400 text-lg text-center">
-                  Hello, I am DEREK. Your Dyanmic, Empowering, Reliable & Efficient Knowledge-Base! <br /> How can I help you today?
+                  Hello, I am DEREK. Your Dynamic, Empowering, Reliable & Efficient Knowledge-Base! <br /> How can I help you today?
                 </div>
               ) : (
                 <div className="space-y-4">

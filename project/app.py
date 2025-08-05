@@ -14,10 +14,10 @@ from flask_cors import CORS
 
 api_key = os.getenv("OPENAI_API_KEY")
 
-# Initialize Non-OpenAI Client
+# Initialize Non-OpenAI Client (For future Ollama or Huggingface Model [Huggingface is not fully supported yet])
 USE_OTHER = os.getenv("USE_OTHER", "false").lower() == "true"
 
-# Initialize OpenAI client
+# Initialize OpenAI client [Good for bug testing]
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
