@@ -7,7 +7,7 @@ from openai import OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # File to store parameter suggestions
-PARAMETER_FILE = "analyzer_output.txt"
+PARAMETER_FILE = os.path.join(os.path.dirname(__file__), "analyzer_output.txt")
 TRUST_THRESHOLD = 3  # Minimum confirmations to make something trusted
 
 # In-memory store for parameter suggestions and their vote counts
@@ -45,8 +45,8 @@ def is_generic_or_personal(messages: List[Dict]) -> bool:
 
 
 def classify_intent_open_ended(messages: List[Dict]) -> str:
-    user_text = "\n".join([m["content"] for m in messages if m["role"] == "user"])
-    
+    chat_transcript = "\n".join([f"{m['role']}: {m['content']}" for m in messages])
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o",
@@ -56,12 +56,12 @@ def classify_intent_open_ended(messages: List[Dict]) -> str:
                     "content": (
                         "You are an AI that infers and names user intent in a short, lowercase snake_case label. "
                         "Avoid using generic labels like 'general_query'. Instead, generate a concise but specific label like "
-                        "'compare_interest_rates', 'find_fee_policy', or 'print_check_procedure' based on the actual user goal."
+                        "'user_wants_to_compare_interest_rates', 'find_on_us_teller_check_cashing_policy', or 'print_check_procedure' based on the actual user goal."
                     )
                 },
                 {
                     "role": "user",
-                    "content": f"What is the user's intent? Here's the conversation:\n\n{user_text}"
+                    "content": f"What is the user's intent? Here's the conversation:\n\n{chat_transcript}"
                 }
             ]
         )
@@ -91,6 +91,7 @@ def load_existing_suggestions():
 
 
 def save_suggestion(parameter: str, value: str, trusted: bool = False):
+    print(f"Writing parameter to: {PARAMETER_FILE}") #bugtesting
     data = {
         "parameter": parameter,
         "value": value,
@@ -123,6 +124,10 @@ def suggest_parameter(key: str, new_value: str) -> Dict[str, str]:
 
 
 def analyze_chat(messages: List[Dict], rating: str, optional_feedback: str = None) -> List[Dict]:
+    print(" [analyze_chat] STARTED") #bugtesting
+    print(" Messages:", messages)
+    print(" Rating:", rating)
+    print(" Feedback:", optional_feedback) 
     """
     Entry point for feedback-based analyzer.
     Tags feedback, identifies potential user intents and returns pathway suggestions.
@@ -141,6 +146,7 @@ def analyze_chat(messages: List[Dict], rating: str, optional_feedback: str = Non
 
     except Exception as e:
         results.append({"error": str(e)})
+        print(f"❌ Failed to store question types: {e}") #bugtesting
 
     return results
 
@@ -148,21 +154,30 @@ def analyze_chat(messages: List[Dict], rating: str, optional_feedback: str = Non
 # Initial load
 load_existing_suggestions()
 
-QUESTION_LOG = "question_types_log.json"
+QUESTION_LOG = os.path.join(os.path.dirname(__file__), "question_types_log.json")
+
 
 def store_question_types(messages: List[Dict]):
+    print(f" Current working dir: {os.getcwd()}")
+    print(f"Writing to: {QUESTION_LOG}")
+
     if not messages:
         return
 
     user_questions = [m["content"] for m in messages if m["role"] == "user"]
+    print(f"Questions: {user_questions}") #bugtesting
     if not user_questions:
         return
-
     if os.path.exists(QUESTION_LOG):
         with open(QUESTION_LOG, "r") as f:
-            data = json.load(f)
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                print("⚠️ Empty or invalid JSON file, resetting log")
+                data = []
     else:
         data = []
+
 
     for q in user_questions:
         data.append({
@@ -172,6 +187,9 @@ def store_question_types(messages: List[Dict]):
 
     with open(QUESTION_LOG, "w") as f:
         json.dump(data, f, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+
 
 def get_trusted_parameters() -> Dict[str, str]:
     return trusted_parameters

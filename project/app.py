@@ -14,7 +14,6 @@ import threading
 from analyzer import analyze_chat, get_trusted_parameters  #Custom python analyzer for feedback-based learning
 
 
-
 api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize Non-OpenAI Client (For future Ollama or Huggingface Model [Huggingface is not fully supported yet])
@@ -262,8 +261,11 @@ def review():
     messages = data.get("messages", [])
     feedback = data.get("feedback", "")  # optional feedback from user
 
-    # Run analysis in a background thread
-    threading.Thread(target=analyze_chat, args=(rating, messages, feedback)).start()
+    if os.getenv("ENABLE_SELF_REVIEW", "false").lower() == "true":
+        threading.Thread(target=analyze_chat, args=(messages, rating, feedback)).start()
+        print("🧠 Self-review triggered.")
+    else:
+        print("🚫 Self-review is disabled by config.")
 
     return jsonify({"status": "review submitted"}), 200
 

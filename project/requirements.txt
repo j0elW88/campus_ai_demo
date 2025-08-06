@@ -10,3 +10,4 @@ python-dotenv
 flask-socketio 
 gunicorn
 pdfplumber
+load_dotenv
