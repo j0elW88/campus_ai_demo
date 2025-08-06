@@ -233,3 +233,11 @@ OTHER_MODEL=llama3.2:1b
 
 - Then from then on use:
 -                    'docker compose up'
+
+## Memory / Parameterization
+
+- Additionally part of this program is self review and parameterization. The files involved are: question_types_log.json, self_review.py, app.py, analyzer.py, and analyzer_output.txt
+
+- Much of the mapping involved is inside of analyzer.py including review and pushing to the model to re-evaluate prompts to become better at answering user questions as it continues usage.
+
+- This can be enabled and disabled in .env from the ENABLE_SELF_REVIEW=true/false. 

@@ -1,2 +1,5 @@
 {"parameter": "intent", "value": "find_routing_number_procedure", "status": "tentative"}
 {"parameter": "intent", "value": "find_routing_number", "status": "tentative"}
+{"parameter": "intent", "value": "user_seeking_wire_transfer_approval_roles", "status": "tentative"}
+{"parameter": "intent", "value": "find_cd_deposit_transaction_code", "status": "tentative"}
+{"parameter": "intent", "value": "user_asks_about_opening_irrevocable_trust_account", "status": "tentative"}
